@@ -43,11 +43,12 @@ try {
     $taskEnvelope=@{ Payload=[Convert]::ToBase64String($taskBytes); Signature=[Convert]::ToBase64String($taskRsa.SignData($taskBytes,[Security.Cryptography.HashAlgorithmName]::SHA256,[Security.Cryptography.RSASignaturePadding]::Pss)) }
     [IO.File]::WriteAllText((Join-Path $taskRelease 'update-manifest.json'),($taskEnvelope | ConvertTo-Json -Compress))
 } finally { $taskRsa.Dispose() }
-Get-ChildItem -LiteralPath $taskRelease -File | Where-Object Name -ne 'SHA256SUMS.txt' | ForEach-Object { (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash+'  '+$_.Name } | Set-Content -LiteralPath (Join-Path $taskRelease 'SHA256SUMS.txt') -Encoding utf8
+$taskPublishedFiles=@($taskAppZip,$taskLauncherZip,(Join-Path $taskRelease 'update-manifest.json'))
+$taskPublishedFiles | ForEach-Object { (Get-FileHash -LiteralPath $_ -Algorithm SHA256).Hash+'  '+[IO.Path]::GetFileName($_) } | Set-Content -LiteralPath (Join-Path $taskRelease 'SHA256SUMS.txt') -Encoding utf8
 if (-not $NoUpload) {
     & gh release create ('v'+$Version) --repo Azuuki69/daeva-sentinel --draft --title ('Daeva Sentinel v'+$Version+' — experimental') --notes-file (Join-Path $taskRoot 'release-notes.md')
     if ($LASTEXITCODE -ne 0) { throw 'Draft release creation failed' }
-    $taskAssets=Get-ChildItem -LiteralPath $taskRelease -File | ForEach-Object FullName
+    $taskAssets=$taskPublishedFiles+@((Join-Path $taskRelease 'SHA256SUMS.txt'))
     & gh release upload ('v'+$Version) @taskAssets --repo Azuuki69/daeva-sentinel
     if ($LASTEXITCODE -ne 0) { throw 'Release upload failed; draft retained' }
     & gh release edit ('v'+$Version) --repo Azuuki69/daeva-sentinel --draft=false --latest
