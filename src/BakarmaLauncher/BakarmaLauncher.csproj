@@ -1,4 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup><OutputType>WinExe</OutputType><TargetFramework>net10.0-windows10.0.19041.0</TargetFramework><UseWPF>true</UseWPF><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><AssemblyName>Daeva Sentinel Launcher</AssemblyName><Version>1.0.0</Version><EnableDefaultCompileItems>false</EnableDefaultCompileItems></PropertyGroup>
+  <PropertyGroup><OutputType>WinExe</OutputType><TargetFramework>net10.0-windows10.0.19041.0</TargetFramework><UseWPF>true</UseWPF><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><AssemblyName>Daeva Sentinel Launcher</AssemblyName><Version>1.0.1</Version><ApplicationIcon>../BakarmaCoach/ui/sentinel.ico</ApplicationIcon><EnableDefaultCompileItems>false</EnableDefaultCompileItems></PropertyGroup>
   <ItemGroup><Compile Include="*.cs"/><Compile Include="Core/*.cs"/><ProjectReference Include="../BakarmaCoach/BakarmaCoach.csproj"/><None Include="update-public-key.pem" CopyToOutputDirectory="PreserveNewest"/></ItemGroup>
 </Project>

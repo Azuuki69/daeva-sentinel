@@ -54,79 +54,6 @@ public sealed class Preferences
 
 public sealed class CoachWindow : Window
 {
-    private const string Markup = """
-    <Grid xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-      <Grid.Background><LinearGradientBrush StartPoint="0,0" EndPoint="1,1"><GradientStop Color="#080D16"/><GradientStop Color="#14243A" Offset="1"/></LinearGradientBrush></Grid.Background>
-      <Grid.ColumnDefinitions><ColumnDefinition Width="210"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-      <Grid.Resources>
-        <Style TargetType="TextBlock"><Setter Property="Foreground" Value="#E8ECF4"/><Setter Property="FontSize" Value="14"/><Setter Property="TextWrapping" Value="Wrap"/></Style>
-        <Style TargetType="Button"><Setter Property="Foreground" Value="#E8E0D2"/><Setter Property="Background" Value="#1D2D42"/><Setter Property="Padding" Value="16,10"/><Setter Property="Margin" Value="0,0,10,0"/><Setter Property="BorderThickness" Value="1"/><Setter Property="BorderBrush" Value="#3B495D"/><Setter Property="Cursor" Value="Hand"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border x:Name="ButtonSurface" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5" Padding="{TemplateBinding Padding}"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="ButtonSurface" Property="BorderBrush" Value="#C0A16F"/><Setter TargetName="ButtonSurface" Property="Background" Value="#2A3D54"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
-        <Style TargetType="CheckBox"><Setter Property="Foreground" Value="#D2DAE8"/><Setter Property="Margin" Value="0,8,0,8"/></Style>
-        <Style TargetType="ComboBox"><Setter Property="Margin" Value="0,6,0,0"/><Setter Property="Foreground" Value="#EDE6D9"/><Setter Property="MinHeight" Value="31"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ComboBox"><Grid>
-          <ToggleButton Focusable="False" IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"><ToggleButton.Template><ControlTemplate TargetType="ToggleButton"><Border x:Name="ComboSurface" Background="#142238" BorderBrush="#40516A" BorderThickness="1" CornerRadius="4"><Path Data="M 0 0 L 4 4 L 8 0" Stroke="#CEB47E" StrokeThickness="1.5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,11,0"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="ComboSurface" Property="BorderBrush" Value="#B59B69"/></Trigger></ControlTemplate.Triggers></ControlTemplate></ToggleButton.Template></ToggleButton>
-          <ContentPresenter Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" Margin="10,6,27,6" VerticalAlignment="Center" IsHitTestVisible="False"/>
-          <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" AllowsTransparency="True" Focusable="False"><Border Background="#152337" BorderBrush="#756243" BorderThickness="1" CornerRadius="4" MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"><ScrollViewer MaxHeight="260"><ItemsPresenter/></ScrollViewer></Border></Popup>
-        </Grid></ControlTemplate></Setter.Value></Setter></Style>
-        <Style TargetType="ComboBoxItem"><Setter Property="Background" Value="#152337"/><Setter Property="Foreground" Value="#EDE6D9"/><Setter Property="Padding" Value="8,6"/></Style>
-        <Style TargetType="TextBox"><Setter Property="Background" Value="#111D2C"/><Setter Property="Foreground" Value="#E8E0D2"/><Setter Property="BorderBrush" Value="#3B495D"/></Style>
-      </Grid.Resources>
-      <Border Grid.Column="0" Background="#D909101B" BorderBrush="#4B4439" BorderThickness="0,0,1,0"><DockPanel Margin="22,24,18,22">
-        <StackPanel DockPanel.Dock="Top">
-          <TextBlock Text="◈" FontFamily="Georgia" FontSize="48" Foreground="#D7B985" HorizontalAlignment="Center" Margin="0,0,0,6"/>
-          <TextBlock Text="DAEVA" FontFamily="Georgia" FontSize="27" Foreground="#E5C991" HorizontalAlignment="Center"/>
-          <TextBlock Text="SENTINEL" FontSize="12" Foreground="#9AAEC7" HorizontalAlignment="Center" Margin="0,5,0,26"/>
-          <TextBlock Text="OVERLAY VIEWS" Foreground="#887C67" FontSize="10" Margin="0,0,0,10"/>
-          <Button x:Name="BossNav" Content="◈  Encounter" HorizontalContentAlignment="Left" Margin="0,0,0,7"/>
-          <Button x:Name="DpsNav" Content="▥  DPS meter" HorizontalContentAlignment="Left" Margin="0,0,0,7"/>
-          <Button x:Name="ThreatNav" Content="◇  Threat estimate" HorizontalContentAlignment="Left" Margin="0,0,0,7"/>
-          <Button x:Name="ScreenNav" Content="⌁  Screen reading" HorizontalContentAlignment="Left" Margin="0,0,0,7"/>
-        </StackPanel>
-        <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom"><TextBlock Text="LANGUAGE" Foreground="#887C67" FontSize="10"/><ComboBox x:Name="UiLocale" Margin="0,8,0,18"/><TextBlock Text="ENGLISH VOICE" Foreground="#81C9CB" FontSize="10"/><TextBlock Text="AION 2 COMPANION" Foreground="#64748B" FontSize="10" Margin="0,8,0,0"/></StackPanel>
-        <Border/>
-      </DockPanel></Border>
-      <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto"><StackPanel Margin="30,26,30,26">
-        <DockPanel><TextBlock DockPanel.Dock="Right" Text="EU / GLOBAL  ·  PROTOTYPE 0.3" Foreground="#91A3BD" FontSize="11" VerticalAlignment="Center"/><TextBlock Text="DAEVA SENTINEL" Foreground="#79DCD2" FontSize="13" FontWeight="Bold"/></DockPanel>
-        <TextBlock Text="Hear the mechanic. Make your move." FontFamily="Georgia" Foreground="#E4CCA4" FontSize="26" Margin="0,14,0,6"/>
-        <TextBlock Text="Test module: Transcendent Bakarma · Draupnir" Foreground="#91A3BD"/>
-        <Border BorderBrush="#63533B" BorderThickness="1" Background="#C8121F30" CornerRadius="8" Padding="18" Margin="0,22,0,16">
-          <StackPanel><TextBlock x:Name="State" Text="READY TO TEST" Foreground="#79DCD2" FontSize="11" FontWeight="Bold"/>
-            <TextBlock x:Name="Alert" Text="Your next warning appears here." FontSize="23" FontWeight="SemiBold" Margin="0,9,0,8"/>
-            <TextBlock x:Name="Cast" Text="No live fight connected" Foreground="#A7B8CE"/>
-            <ProgressBar x:Name="CastBar" Height="4" Margin="0,12,0,0" Maximum="100" Value="0" Foreground="#79DCD2" Background="#29364A"/>
-          </StackPanel>
-        </Border>
-        <WrapPanel Margin="0,0,0,10"><Button x:Name="Start" Content="Start live alerts" Background="#305A58" BorderBrush="#73A7A0"/><Button x:Name="Demo" Content="Play voice demo"/><Button x:Name="Test" Content="Test voice"/><Button x:Name="Overlay" Content="Show overlay"/><Button x:Name="Stop" Content="Stop / reset"/></WrapPanel>
-        <TextBlock x:Name="Status" Text="Live capture requires Npcap. The demo works without the game." Foreground="#A7B8CE" FontSize="12"/>
-        <TextBlock x:Name="VoiceStatus" Text="Preparing local voice clips…" Foreground="#79DCD2" FontSize="12" Margin="0,5,0,18"/>
-        <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="20"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-          <StackPanel><TextBlock Text="DIFFICULTY" Foreground="#91A3BD" FontSize="11"/><ComboBox x:Name="Mode"/>
-            <TextBlock Text="VOICE" Foreground="#91A3BD" FontSize="11" Margin="0,14,0,0"/><ComboBox x:Name="Voices"/>
-            <DockPanel Margin="0,12,0,0"><TextBlock Text="Volume" DockPanel.Dock="Left" Margin="0,0,12,0"/><Slider x:Name="Volume" Minimum="0" Maximum="100" Value="80" VerticalAlignment="Center"/></DockPanel>
-            <CheckBox x:Name="VoiceOn" Content="Speak mechanic warnings" IsChecked="True"/>
-            <CheckBox x:Name="Countdown" Content="Speak cast-end countdown: 3, 2, 1"/>
-          </StackPanel>
-          <StackPanel Grid.Column="2"><TextBlock Text="OPTIONAL HP PREPARATION" Foreground="#91A3BD" FontSize="11"/>
-            <CheckBox x:Name="HpOn" Content="Enable unverified HP reminders"/>
-            <TextBox x:Name="HpValues" Padding="8,6" ToolTip="Comma-separated wave HP thresholds. Leave blank until confirmed."/>
-            <TextBlock Text="Conquest starts with Game8's 75,25 as a suggestion. Thresholds vary across guides and difficulties. Reminders are off by default." Foreground="#91A3BD" FontSize="12" Margin="0,8,0,0"/>
-            <TextBlock Text="Countdown means cast end, not wave arrival. Individual jump timing is not predicted." Foreground="#91A3BD" FontSize="12" Margin="0,10,0,0"/>
-          </StackPanel>
-        </Grid>
-        <Border Background="#121C2A" CornerRadius="8" Padding="14" Margin="0,14,0,0"><StackPanel>
-          <TextBlock Text="INPUT SOURCES" Foreground="#91A3BD" FontSize="11"/>
-          <WrapPanel><CheckBox x:Name="NetworkOn" Content="Network events" Margin="0,8,22,8"/><CheckBox x:Name="ScreenOn" Content="Screen capture + English OCR"/></WrapPanel>
-          <WrapPanel><Button x:Name="Calibrate" Content="Calibrate screen" Padding="12,6"/><Button x:Name="Preview" Content="Preview screen reading" Padding="12,6"/></WrapPanel>
-          <TextBlock x:Name="ScreenStatus" Text="Screen input needs calibration: boss name + ability name." Foreground="#91A3BD" FontSize="12" Margin="0,8,0,0"/>
-        </StackPanel></Border>
-        <DockPanel Margin="0,12,0,0"><TextBlock Text="OVERLAY VIEW" DockPanel.Dock="Left" Foreground="#91A3BD" FontSize="11" VerticalAlignment="Center" Margin="0,0,12,0"/><Button x:Name="ResetMeters" Content="Reset meters" DockPanel.Dock="Right" Padding="12,6" Margin="10,0,0,0"/><ComboBox x:Name="OverlayTab" Margin="0"/></DockPanel>
-        <TextBlock Text="DPS = recorded party damage / elapsed time. Threat bars are a damage-only proxy, not server enmity; taunts, tank bonuses and healing threat are not modeled." Foreground="#91A3BD" FontSize="11" Margin="0,7,0,0"/>
-        <TextBlock Text="Ctrl+Alt+B: show/hide · Ctrl+Alt+M: mute · Ctrl+Alt+1/2/3: Boss/DPS/Threat. Shared experimental boss rules; live accuracy still needs verification." Foreground="#91A3BD" FontSize="12" Margin="0,12,0,0"/>
-        <TextBlock Text="RECENT CALLOUTS" Foreground="#91A3BD" FontSize="11" Margin="0,18,0,8"/>
-        <ListBox x:Name="History" Height="100" Background="#101724" Foreground="#CCD7E6" BorderThickness="0" Padding="8"/>
-        <TextBlock Text="Local mechanic logs: data/logs · No combat uploads · Audio uses your Windows default output" Foreground="#6F839F" FontSize="11" Margin="0,12,0,0"/>
-      </StackPanel></ScrollViewer>
-    </Grid>
-    """;
     private readonly Grid _root;
     private readonly Encounter _engine = new();
     private readonly Speech _speech;
@@ -164,8 +91,10 @@ public sealed class CoachWindow : Window
         int languageArgument = Array.IndexOf(args, "--language");
         if (languageArgument >= 0 && languageArgument + 1 < args.Length) _prefs.UiLocale = args[languageArgument + 1] == "pl" ? "pl" : "en";
         UiLanguage.Current = _prefs.UiLocale;
-        _root = (Grid)XamlReader.Parse(Markup); Content = _root;
-        Title = "Daeva Sentinel · Aion 2"; Width = 1180; Height = 940; MinWidth = 980; MinHeight = 720;
+        _root = UiLayout.Load("AppShell.xaml"); Content = _root;
+        C<TextBlock>("VersionBadge").Text = "EU / GLOBAL · " + typeof(CoachWindow).Assembly.GetName().Version?.ToString(3);
+        Title = "Daeva Sentinel · Aion 2"; Width = 1160; Height = 900; MinWidth = 980; MinHeight = 760;
+        Icon = UiLayout.Icon();
         Background = Brushes.Black; FontFamily = new FontFamily("Segoe UI"); WindowStartupLocation = WindowStartupLocation.CenterScreen;
         _speech = new Speech(_data); _log = new EventLog(_data);
         if (Speech.Voices.Any(v => v.Id == _prefs.VoiceId)) _speech.VoiceId = _prefs.VoiceId;
@@ -186,12 +115,12 @@ public sealed class CoachWindow : Window
         C<ComboBox>("OverlayTab").SelectedIndex = Math.Clamp(_prefs.OverlayTab, 0, 2);
         _overlay.SelectTab(C<ComboBox>("OverlayTab").SelectedIndex);
         _overlay.TabChanged += tab => C<ComboBox>("OverlayTab").SelectedIndex = tab;
-        C<ComboBox>("OverlayTab").SelectionChanged += (_, _) => _overlay.SelectTab(Math.Max(0, C<ComboBox>("OverlayTab").SelectedIndex));
+        C<ComboBox>("OverlayTab").SelectionChanged += (_, _) => { _overlay.SelectTab(Math.Max(0, C<ComboBox>("OverlayTab").SelectedIndex)); HighlightNavigation(); };
         C<ComboBox>("UiLocale").ItemsSource = new[] { "English", "Polski" }; C<ComboBox>("UiLocale").SelectedIndex = _prefs.UiLocale == "pl" ? 1 : 0;
         C<ComboBox>("UiLocale").SelectionChanged += (_, _) => SetLanguage(C<ComboBox>("UiLocale").SelectedIndex == 1 ? "pl" : "en");
         foreach (var pair in new[] { ("BossNav", 0), ("DpsNav", 1), ("ThreatNav", 2) })
             C<Button>(pair.Item1).Click += (_, _) => { C<ComboBox>("OverlayTab").SelectedIndex = pair.Item2; if (!_overlay.IsVisible) ToggleOverlay(); };
-        C<Button>("ScreenNav").Click += async (_, _) => await CalibrateScreen();
+        C<Button>("ScreenNav").Click += (_, _) => C<TabControl>("SettingsTabs").SelectedIndex = 1;
         C<Button>("ResetMeters").Click += (_, _) => _live?.ResetMeters();
         C<Button>("Calibrate").Click += async (_, _) => await CalibrateScreen();
         C<Button>("Preview").Click += (_, _) =>
@@ -236,7 +165,7 @@ public sealed class CoachWindow : Window
         _timer.Tick += (_, _) => Tick(); _timer.Start();
         _native = new NativeControls(this, ToggleOverlay, () => C<CheckBox>("VoiceOn").IsChecked = C<CheckBox>("VoiceOn").IsChecked != true,
             tab => C<ComboBox>("OverlayTab").SelectedIndex = tab);
-        SourceInitialized += (_, _) => GameCapture.Exclude(this);
+        SourceInitialized += (_, _) => { GameCapture.Exclude(this); UiLayout.DarkCaption(this); };
         Loaded += async (_, _) =>
         {
             await WarmVoice();
@@ -399,7 +328,19 @@ public sealed class CoachWindow : Window
         int tab = C<ComboBox>("OverlayTab").SelectedIndex;
         C<ComboBox>("OverlayTab").ItemsSource = new[] { "Boss alerts", "DPS meter", "Threat / boss target" }.Select(UiLanguage.T).ToArray();
         C<ComboBox>("OverlayTab").SelectedIndex = Math.Max(0, tab);
-        _changingLanguage = false; UiLanguage.Apply(_root); _overlay.Localize();
+        _changingLanguage = false; UiLanguage.Apply(_root); _overlay.Localize(); HighlightNavigation();
+    }
+    private void HighlightNavigation()
+    {
+        int selected = C<ComboBox>("OverlayTab").SelectedIndex;
+        string[] names = ["BossNav", "DpsNav", "ThreatNav"];
+        for (int i = 0; i < names.Length; i++)
+        {
+            var button = C<Button>(names[i]);
+            button.Background = new SolidColorBrush(i == selected ? Color.FromRgb(24, 43, 61) : Colors.Transparent);
+            button.Foreground = new SolidColorBrush(i == selected ? Color.FromRgb(222, 201, 160) : Color.FromRgb(143, 166, 193));
+            button.BorderBrush = new SolidColorBrush(i == selected ? Color.FromRgb(63, 76, 87) : Colors.Transparent);
+        }
     }
 
     private async Task CalibrateScreen()
@@ -456,6 +397,15 @@ public sealed class CoachWindow : Window
         int i = Array.IndexOf(_args, "--screenshot");
         if (i >= 0 && i + 1 < _args.Length)
         {
+            int settingsTab = C<TabControl>("SettingsTabs").SelectedIndex;
+            foreach (int page in new[] { 1, 2 })
+            {
+                C<TabControl>("SettingsTabs").SelectedIndex = page; UiLanguage.Apply(_root); UpdateLayout();
+                var pagePicture = new RenderTargetBitmap((int)ActualWidth, (int)ActualHeight, 96, 96, PixelFormats.Pbgra32);
+                pagePicture.Render(this); var pageEncoder = new PngBitmapEncoder(); pageEncoder.Frames.Add(BitmapFrame.Create(pagePicture));
+                using var pageFile = File.Create(Path.ChangeExtension(_args[i + 1], page == 1 ? ".capture.png" : ".audio.png")); pageEncoder.Save(pageFile);
+            }
+            C<TabControl>("SettingsTabs").SelectedIndex = settingsTab;
             UpdateLayout();
             var bitmap = new RenderTargetBitmap((int)ActualWidth, (int)ActualHeight, 96, 96, PixelFormats.Pbgra32);
             bitmap.Render(this); var png = new PngBitmapEncoder(); png.Frames.Add(BitmapFrame.Create(bitmap));
@@ -489,9 +439,9 @@ public sealed class CoachWindow : Window
 
 public sealed class AlertOverlay : Window
 {
-    private readonly TextBlock _label = new() { Foreground = Brush("#9CAEC5"), FontSize = 10, FontWeight = FontWeights.SemiBold, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis };
+    private readonly TextBlock _label = new() { Foreground = Brush("#9CAEC5"), FontSize = 10, FontWeight = FontWeights.SemiBold, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, TextWrapping = TextWrapping.NoWrap };
     private readonly TextBlock _state = new() { Foreground = Brush("#70839D"), FontSize = 9, Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center };
-    private readonly TextBlock _text = new() { Foreground = Brush("#EFF5FC"), FontSize = 17, FontWeight = FontWeights.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis, Margin = new Thickness(0, 5, 0, 0) };
+    private readonly TextBlock _text = new() { Foreground = Brush("#EFF5FC"), FontSize = 17, FontWeight = FontWeights.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis, TextWrapping = TextWrapping.NoWrap, Margin = new Thickness(0, 5, 0, 0) };
     private readonly TextBlock _time = new() { Foreground = Brush("#83E5D5"), FontSize = 14, FontWeight = FontWeights.SemiBold, Margin = new Thickness(10, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center };
     private readonly ProgressBar _bar = new() { Height = 2, Maximum = 100, Margin = new Thickness(0, 9, 0, 0), Foreground = Brush("#83E5D5"), Background = Brush("#263547"), BorderThickness = new Thickness(0) };
     private readonly Border _accent = new() { Width = 2, Background = Brush("#83E5D5"), CornerRadius = new CornerRadius(1), Margin = new Thickness(0, 1, 11, 1) };
@@ -511,12 +461,17 @@ public sealed class AlertOverlay : Window
     public event Action<int>? TabChanged;
     public AlertOverlay()
     {
+        Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri(Path.Combine(AppContext.BaseDirectory, "ui", "Theme.xaml")) });
         Title = "Daeva Sentinel overlay"; Width = 340; SizeToContent = SizeToContent.Height;
         WindowStyle = WindowStyle.None; AllowsTransparency = true; Background = Brushes.Transparent; Topmost = true; ShowInTaskbar = false; ShowActivated = false;
         var panel = new StackPanel();
         var heading = new DockPanel { LastChildFill = true };
         DockPanel.SetDock(_time, Dock.Right); heading.Children.Add(_time);
-        DockPanel.SetDock(_state, Dock.Right); heading.Children.Add(_state); heading.Children.Add(_label);
+        var badge = new Border { Background = Brush("#1A2B3B"), CornerRadius = new CornerRadius(3), Padding = new Thickness(5, 2, 5, 2), Margin = new Thickness(5, 0, 0, 0), Child = _state };
+        _state.Margin = new Thickness(0);
+        DockPanel.SetDock(badge, Dock.Right); heading.Children.Add(badge);
+        var crest = new TextBlock { Text = "◇", Foreground = Brush("#B99D6B"), FontSize = 13, Margin = new Thickness(0, 0, 7, 0), VerticalAlignment = VerticalAlignment.Center };
+        DockPanel.SetDock(crest, Dock.Left); heading.Children.Add(crest); heading.Children.Add(_label);
         panel.Children.Add(heading); _bossPanel.Children.Add(_text); _bossPanel.Children.Add(_bar);
         panel.Children.Add(_bossPanel); panel.Children.Add(_meterPanel);
         for (int tab = 0; tab < 3; tab++)
@@ -627,13 +582,15 @@ public sealed class AlertOverlay : Window
     private void MeterRow(int rank, string name, string value, double width, string color, string tooltip)
     {
         var row = new Grid { Height = 26, Margin = new Thickness(0, 0, 0, 3), ToolTip = tooltip };
-        row.Children.Add(new Border { Background = Brush("#182538"), CornerRadius = new CornerRadius(3) });
-        var bar = new Border { Background = Brush(color), Opacity = .22, CornerRadius = new CornerRadius(3), HorizontalAlignment = HorizontalAlignment.Left };
+        row.Children.Add(new Border { Background = Brush("#111F30"), CornerRadius = new CornerRadius(3) });
+        Color tint = ((SolidColorBrush)Brush(color)).Color;
+        var bar = new Border { Background = new LinearGradientBrush(Color.FromArgb(78, tint.R, tint.G, tint.B), Color.FromArgb(30, tint.R, tint.G, tint.B), 0), CornerRadius = new CornerRadius(3), HorizontalAlignment = HorizontalAlignment.Left };
         row.SizeChanged += (_, _) => bar.Width = Math.Max(0, row.ActualWidth * Math.Clamp(width, 0, 100) / 100);
         row.Children.Add(bar);
+        row.Children.Add(new Border { Width = 2, HorizontalAlignment = HorizontalAlignment.Left, Background = Brush(color), Opacity = .6, Margin = new Thickness(0, 4, 0, 4), CornerRadius = new CornerRadius(1) });
         var content = new Grid { Margin = new Thickness(8, 0, 8, 0) }; content.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(18) }); content.ColumnDefinitions.Add(new ColumnDefinition()); content.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
         content.Children.Add(new TextBlock { Text = rank.ToString(), FontSize = 10, Foreground = Brush("#7189A4"), VerticalAlignment = VerticalAlignment.Center });
-        var label = new TextBlock { Text = name, FontSize = 12, Foreground = Brush("#E5EDF9"), TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = VerticalAlignment.Center, Tag = "GameName" };
+        var label = new TextBlock { Text = name, FontSize = 12, Foreground = Brush("#E5EDF9"), TextTrimming = TextTrimming.CharacterEllipsis, TextWrapping = TextWrapping.NoWrap, VerticalAlignment = VerticalAlignment.Center, Tag = "GameName" };
         Grid.SetColumn(label, 1); content.Children.Add(label);
         var number = new TextBlock { Text = value, FontSize = 12, FontWeight = FontWeights.SemiBold, Foreground = Brush(color), Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center };
         Grid.SetColumn(number, 2); content.Children.Add(number); row.Children.Add(content); _meterPanel.Children.Add(row);

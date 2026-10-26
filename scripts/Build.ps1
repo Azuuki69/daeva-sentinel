@@ -1,4 +1,4 @@
-param([string]$Dotnet = 'dotnet', [string]$Version = '0.3.0')
+param([string]$Dotnet = 'dotnet', [string]$Version = '0.3.1')
 $ErrorActionPreference='Stop'
 $taskRoot=Split-Path $PSScriptRoot -Parent
 $taskVendor=Join-Path $taskRoot 'src/Aion-DPS-Meter'

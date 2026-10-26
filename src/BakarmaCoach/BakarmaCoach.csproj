@@ -7,7 +7,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>Daeva Sentinel</AssemblyName>
-    <Version>0.3.0</Version>
+    <ApplicationIcon>ui/sentinel.ico</ApplicationIcon>
+    <Version>0.3.1</Version>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
@@ -15,6 +16,10 @@
     <Compile Include="Core/*.cs" />
     <None Include="voicepack/*" CopyToOutputDirectory="PreserveNewest" />
     <None Include="tessdata/*" CopyToOutputDirectory="PreserveNewest" />
+    <Page Remove="ui/*.xaml" />
+    <None Remove="ui/*.xaml" />
+    <Content Include="ui/*.xaml" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="ui/*.ico" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <PackageReference Include="Tesseract" Version="5.2.0" />
     <Using Remove="System.Windows.Forms" />
     <Using Remove="System.Drawing" />

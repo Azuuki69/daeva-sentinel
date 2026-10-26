@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.IO;
 using AionDPS.Aion2;
 using AionDPS.Aion2.Protocol;
 using BakarmaCoach.Core;
@@ -180,6 +181,31 @@ Check("Damage proxy does not override the observed boss target", () =>
     var t = new ThreatEstimate(); t.Add(1, 10000); t.Add(2, 1000); var v = t.View(2, 1, id => id == 2 ? "Tank" : "You"); Assert(v.Rows[0].Relative == 100 && v.Target == "Tank" && !v.TargetIsYou);
 });
 Check("Threat view can show target without damage data", () => Assert(new ThreatEstimate().View(1, 1, _ => "Player").TargetIsYou));
+Check("Language changes reach inactive tabs while preserving game and player names", () =>
+{
+    Exception? failure = null;
+    var uiThread = new Thread(() =>
+    {
+        try
+        {
+            var tabs = new System.Windows.Controls.TabControl();
+            tabs.Items.Add(new System.Windows.Controls.TabItem { Header = "Encounter", Content = new System.Windows.Controls.TextBlock { Text = "DIFFICULTY" } });
+            var page = new System.Windows.Controls.StackPanel();
+            var volume = new System.Windows.Controls.TextBlock { Text = "Volume" };
+            var gameName = new System.Windows.Controls.TextBlock { Text = "Wave of Death" };
+            var player = new System.Windows.Controls.TextBlock { Text = "Encounter", Tag = "GameName" };
+            page.Children.Add(volume); page.Children.Add(gameName); page.Children.Add(player);
+            tabs.Items.Add(new System.Windows.Controls.TabItem { Header = "VOICE", Content = page }); tabs.SelectedIndex = 0;
+            BakarmaCoach.UiLanguage.Current = "pl"; BakarmaCoach.UiLanguage.Apply(tabs);
+            Assert(volume.Text == "Głośność" && gameName.Text == "Wave of Death" && player.Text == "Encounter");
+            BakarmaCoach.UiLanguage.Current = "en"; BakarmaCoach.UiLanguage.Apply(tabs); Assert(volume.Text == "Volume");
+        }
+        catch (Exception ex) { failure = ex; }
+        finally { BakarmaCoach.UiLanguage.Current = "en"; }
+    });
+    uiThread.SetApartmentState(ApartmentState.STA); uiThread.Start(); uiThread.Join();
+    if (failure is not null) throw failure;
+});
 Console.WriteLine($"{passed} passed, {failed} failed");
 if (args.Length > 0) File.WriteAllText(args[0], JsonSerializer.Serialize(new { passed, failed, tests = results }, new JsonSerializerOptions { WriteIndented = true }));
 return failed == 0 ? 0 : 1;

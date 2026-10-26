@@ -4,6 +4,10 @@ A Windows companion for AION 2 with spoken Bakarma warnings, a movable in-game o
 
 **[Download the launcher](https://github.com/Azuuki69/daeva-sentinel/releases/latest)** · [Releases](https://github.com/Azuuki69/daeva-sentinel/releases)
 
+![Companion dashboard, Polish interface](docs/images/dashboard.png)
+
+![DPS overlay with synthetic demo data](docs/images/overlay.png)
+
 ## Start playing
 
 1. Download **Daeva-Sentinel-Launcher** from Releases and extract the complete ZIP into a writable folder.

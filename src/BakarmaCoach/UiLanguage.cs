@@ -10,6 +10,12 @@ public static class UiLanguage
     public static string Current { get; set; } = "en";
     private static readonly Dictionary<string, string> Polish = new()
     {
+        ["Battle companion"] = "Asystent walki", ["Encounter profiles"] = "Profile walki", ["Shared experimental rules for all three modes."] = "Wspólne, eksperymentalne reguły dla trzech poziomów trudności.",
+        ["Game names stay in their original language."] = "Nazwy z gry pozostają w oryginalnym języku.", ["Optional and unverified. Disabled by default."] = "Opcjonalne i niezweryfikowane. Domyślnie wyłączone.",
+        ["Two sources. One warning."] = "Dwa źródła. Jedno ostrzeżenie.", ["Network events supply timing. Screen OCR confirms visible skill names. Duplicate callouts are suppressed."] = "Sieć dostarcza informacje o czasie, a OCR odczytuje widoczne nazwy umiejętności. Powtórzone ostrzeżenia są pomijane.",
+        ["Local recognition · screenshots stay in memory"] = "Odczyt lokalny · obrazy pozostają w pamięci", ["English voice, always."] = "Głos zawsze po angielsku.",
+        ["Interface language changes the controls, not the spoken callouts or game names."] = "Zmiana języka dotyczy interfejsu. Głos i nazwy z gry pozostają po angielsku.",
+        ["Your companion in Atreia."] = "Twój towarzysz w Atreia.", ["Ready for the next encounter."] = "Gotowy na kolejną walkę.",
         ["Hear the mechanic. Make your move."] = "Usłysz ostrzeżenie. Zareaguj na czas.",
         ["Transcendent Bakarma · Draupnir · Local voice alerts"] = "Transcendent Bakarma · Draupnir · Lokalne ostrzeżenia głosowe",
         ["Test module: Transcendent Bakarma · Draupnir"] = "Moduł testowy: Transcendent Bakarma · Draupnir",
@@ -91,9 +97,18 @@ public static class UiLanguage
     }
     public static void Apply(DependencyObject root)
     {
+        Apply(root, new HashSet<DependencyObject>());
+    }
+    private static void Apply(DependencyObject root, HashSet<DependencyObject> visited)
+    {
+        if (!visited.Add(root)) return;
         if (root is TextBlock text && !Equals(text.Tag, "GameName")) text.Text = T(text.Text);
         if (root is ContentControl content && content.Content is string label) content.Content = T(label);
+        if (root is HeaderedContentControl header && header.Header is string title) header.Header = T(title);
         if (root is FrameworkElement element && element.ToolTip is string tip) element.ToolTip = T(tip);
-        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++) Apply(VisualTreeHelper.GetChild(root, i));
+        if (root is Visual || root is System.Windows.Media.Media3D.Visual3D)
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++) Apply(VisualTreeHelper.GetChild(root, i), visited);
+        foreach (object child in LogicalTreeHelper.GetChildren(root))
+            if (child is DependencyObject dependency) Apply(dependency, visited);
     }
 }
