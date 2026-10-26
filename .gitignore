@@ -1,0 +1,13 @@
+**/bin/
+**/obj/
+src/Aion-DPS-Meter/
+.artifacts/
+.build/
+data/
+**/data/
+**/*private*.pem
+**/launcher-state.json
+**/launcher-language.txt
+**/update-cache/
+**/versions/
+*.user

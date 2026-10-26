@@ -1,0 +1,55 @@
+Daeva Sentinel 0.3
+
+Custom encounter rules, overlay, speech caching and app shell: local prototype
+created for this task. This build has not been validated in a real boss fight.
+
+PASSIVE CAPTURE AND PROTOCOL PARSER
+Aion-DPS-Meter by SkeeveTV / SkeeveAN:
+https://github.com/SkeeveAN/Aion-DPS-Meter
+Pinned commit: 29ad34ea9babe10ec0f0fbcdd7661b2c2bad0fc6
+MIT license; full license is in LICENSE-Aion-DPS-Meter.txt.
+The source project is referenced as a library. The upstream main program, UI,
+updater, telemetry/feedback and upload services are not started by this app.
+The app instantiates only its passive packet source and entity/encounter data.
+SQLite native package is overridden to 3.53.3 to avoid the vulnerable upstream
+transitive version. The coach itself does not use a SQLite database.
+
+Other parser/build dependencies: SharpPcap 6.3.0, PacketDotNet 1.4.7,
+Microsoft.Data.Sqlite 9.0.9, SQLitePCLRaw native library 3.53.3, Velopack 1.2.0,
+Microsoft .NET 10. Included runtime notices are in ThirdPartyNotices.txt and
+LICENSE.txt. Npcap is NOT redistributed; install it from npcap.com if needed.
+
+ENGLISH VOICE PACK
+Pre-generated English WAV clips using Piper 2023.11.14-2:
+https://github.com/rhasspy/piper/releases/tag/2023.11.14-2
+Model: en_US-ljspeech-high
+https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/high
+Model card: voicepack/MODEL_CARD.txt. Voice repository license: MIT.
+Training dataset: LJ Speech (public domain), https://keithito.com/LJ-Speech-Dataset/
+Piper binary/model are build tools and are not bundled in the portable app.
+The generated phrases are listed in voicepack/manifest.json. No person's voice
+has been cloned from a user recording; this is the publicly supplied model.
+
+GAME DATA AND MECHANICS
+AION 2 names and game data remain the property of NCSOFT and respective owners.
+Parser-provided skill names/IDs and NPC catalog are used locally for recognition.
+Initial wave/stagger instructions and the optional Conquest HP suggestion are
+based on the user-provided guide:
+https://game8.co/games/Aion-2/archives/614872
+Guide thresholds conflict across other sources; HP reminders are disabled.
+Mechanic instructions and mode variants remain provisional until tested in game.
+This app is not affiliated with or approved by NCSOFT, Questlog, Shugo or DBM.
+
+
+SCREEN OCR
+Tesseract .NET wrapper 5.2.0 by Charles Weld (Apache-2.0):
+https://github.com/charlesw/tesseract
+Tesseract OCR engine and English tessdata_fast model (Apache-2.0):
+https://github.com/tesseract-ocr/tessdata_fast
+The model license is included in tessdata/LICENSE.txt. Only calibrated game text
+regions are recognized; ordinary screenshots remain in memory and are not uploaded.
+
+LAUNCHER
+The launcher uses RSA-PSS SHA-256 signatures and signed SHA-256 package checksums.
+Only the publisher public key is bundled. The private signing key is not part
+of this source repository or the distributed downloads.
